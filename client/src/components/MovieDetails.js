@@ -1,24 +1,17 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
-class MovieDetails extends Component {
-  state = {
-    movie: [],
-  };
-  async componentDidMount() {
-    console.log("did you make it here?");
-    let res = await axios.get(
-      `http://localhost:5000/movies/${this.props.match.params.id}`
-    );
-    console.log("HELLO", res.data);
-    this.setState({
-      movie: res.data,
-    });
-  }
+function MovieDetails(props) {
+  let [deets, setDeets] = useState({});
 
-  render() {
-    return <div>{this.state.movie.title}</div>;
-  }
+  axios
+    .get(`http://localhost:5000/movies/${props.match.params.id}`)
+    .then((res) => {
+      console.log(res);
+      setDeets(res.data);
+    });
+
+  return <div>{deets.title}</div>;
 }
 
 export default MovieDetails;

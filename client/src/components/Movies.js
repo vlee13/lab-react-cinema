@@ -1,20 +1,19 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-class Movies extends Component {
-  state = {
-    movies: [],
-  };
-  async componentDidMount() {
-    let res = await axios.get("http://localhost:5000/movies");
-    this.setState({
-      movies: res.data,
-    });
-  }
+function Movies() {
+  let [movies, setMovies] = useState([]);
 
-  displayMovies = () => {
-    return this.state.movies.map((eachMovie) => {
+  useEffect(() => {
+    axios.get("http://localhost:5000/movies").then((res) => {
+      console.log(res);
+      setMovies(res.data);
+    });
+  }, []);
+
+  const displayMovies = () => {
+    return movies.map((eachMovie) => {
       return (
         <li>
           <img src={eachMovie.image} alt="movieImg" />
@@ -27,9 +26,7 @@ class Movies extends Component {
     });
   };
 
-  render() {
-    return <div>{this.displayMovies()}</div>;
-  }
+  return <div>{displayMovies()}</div>;
 }
 
 export default Movies;
